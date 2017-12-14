@@ -1,0 +1,11 @@
+{
+  "android": {
+    "release": {
+      "alias": "slgDV2",
+      "keystore": "c:\\slg-dv2-key.keystore",
+      "keystoreType": "",
+      "password": "OM_3081slg",
+      "storePassword": "OM_3081slg"
+    }
+  }
+}

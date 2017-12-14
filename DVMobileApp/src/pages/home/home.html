@@ -1,0 +1,21 @@
+﻿<ion-header>
+    <ion-navbar>
+        <ion-item>
+            <ion-avatar item-start style="float:left">
+                <img src="assets/img/Basavanna.jpg" />
+            </ion-avatar>
+            <h2 text-center class="tab-header"><b>ದಿನಕ್ಕೊಂದು ವಚನ</b></h2>
+            <p text-center><b>{{day}}, {{date}}</b></p>
+        </ion-item>
+    </ion-navbar>
+</ion-header>
+
+<ion-content no-padding class="card-background-page">
+    <ion-card>
+        <img src="assets/img/bgVachana.jpg" />
+        <div class="card-contents">
+            {{vachanaOftheDay?.Vachana}}
+            <div class="card-author">{{vachanaOftheDay?.Author}}</div>
+        </div>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,122 @@
+﻿import { Component } from '@angular/core';
+import { AlertController, LoadingController, NavController, Platform, NavParams } from 'ionic-angular';
+import { Vachanas, ViewModel_Vachana, T1 } from '../../providers/Vachanas';
+
+@Component({
+    selector: 'page-summary',
+    templateUrl: 'summary.html'
+})
+export class SummaryPage {
+
+    VachanaId: any;
+    vachanaOftheDay: ViewModel_Vachana;
+
+    constructor(public navCtrl: NavController,
+        public navPrms: NavParams,
+        public platform: Platform,
+        public alertController: AlertController,
+        public loadingCtrl: LoadingController,
+        public vachana: Vachanas,
+        public t1: T1) {
+
+    }
+
+    ionViewDidLoad() {
+
+        debugger;
+        //Once the main view loads
+        //and after the platform is ready...
+        this.platform.ready().then(() => {
+
+            this.t1.getId();
+            //Setup a resume event listener
+            document.addEventListener('resume', () => {
+
+                this.t1.getId();
+                //Get the local weather when the app resumes
+                this.getVachanaForToday_Test();
+            });
+            //Populate the form with the current location data
+            this.getVachanaForToday_Test();
+
+            this.t1.getId();
+        });
+    }
+
+    getVachanaForToday_Test() {
+
+        this.vachanaOftheDay = new ViewModel_Vachana(1234, "ಬ ಎಂಬಲ್ಲಿ ಎನ್ನ ಭಾವ ಹಿಂಗಿತ್ತು ಸ ಎಂಬಲ್ಲಿ ಸರ್ವಜ್ಞ ನಾದೆನು ವ ಎಂದು ವಾಚಿಸುವವೊಡೆ ವಸ್ತು ಚೈತನ್ಯಾತ್ಮಕನಾದೆನು ಇಂತಿ ಬಸವಾಕ್ಷರ ತ್ರಯಗಳೆನ್ನ ಸರ್ವತಂಗಗಳಲ್ಲಿ ತೊಲಗಿ ಬೆಳಗುವುದನ್ನು ಕಂಡು ನಾನು ನೀನು ಬಸವ ಬಸವ ಎನುತಿದ್ದೇವಯ್ಯ ಗುಹೇಶ್ವರ", "ವಿಶ್ವಗುರು ಬಸವಣ್ಣ", "ಲ ರು ಗೊಳಸಂಗಿ", "ಬ ಎಂಬಲ್ಲಿ ಎನ್ನ ಭಾವ ಹಿಂಗಿತ್ತು ಸ ಎಂಬಲ್ಲಿ ಸರ್ವಜ್ಞ ನಾದೆನು ವ ಎಂದು ವಾಚಿಸುವವೊಡೆ ವಸ್ತು ಚೈತನ್ಯಾತ್ಮಕನಾದೆನು ಇಂತಿ ಬಸವಾಕ್ಷರ ತ್ರಯಗಳೆನ್ನ ಸರ್ವತಂಗಗಳಲ್ಲಿ ತೊಲಗಿ ಬೆಳಗುವುದನ್ನು ಕಂಡು ನಾನು ನೀನು ಬಸವ ಬಸವ ಎನುತಿದ್ದೇವಯ್ಯ ಗುಹೇಶ್ವರ", null, null);
+    }
+
+    getVachanaForToday() {
+
+        //clear out the previous array contents
+        //this.vachanaOftheDay = {};
+        //Create the loading indicator
+        let loader = this.loadingCtrl.create({
+            content: "Retrieving the Vachana..."
+        });
+        //Show the loading indicator
+        loader.present();
+        this.vachana.getVachanas(new Date()).then(
+            data => {
+                //Hide the loading indicator
+                loader.dismiss();
+                //Now, populate the array with data from the weather service
+                if (data && data._id !== undefined) {
+                    //We have data, so lets do something with it 
+                    //var vach1 = new ViewModel_Vachana(data.Id, data.Value, data.Author, data.Contributor);
+                    //this.vachanaOftheDay = data.Value;
+                    this.vachanaOftheDay = new ViewModel_Vachana(data._id, data.Vachana, data.Author, data.Contributor, data.Summary, null, null);
+                    //this.nav.push(SummaryPage, this.vachanaOftheDay);
+                } else {
+                    //This really should never happen
+                    //console.error('Error retrieving Vachanas data: Data object is empty');
+
+                    this.vachana.LogMessage({
+                        level: 'warn',
+                        source: 'Mobile App Summary : getVachanas',
+                        message: 'Error retrieving Vachanas data: Data object is empty',
+                        data: {}
+                    }).then(
+
+                        data => { },
+                        error => { }
+                        );
+
+                    this.showAlert("ದಯವಿಟ್ಟು ಕ್ಷಮಿಸಿ, ಈ ದಿನದ ವಚನ ನಿಮ್ಮ ಮನಸ್ಸಿನಲ್ಲಿದೆ!");
+                }
+            },
+            error => {
+                //Hide the loading indicator
+                loader.dismiss();
+                //console.error('Error retrieving Vachanas data');
+                //console.dir(error);
+
+                this.vachana.LogMessage({
+                    level: 'error',
+                    source: 'Mobile App Summary : getVachanas',
+                    message: 'Error retrieving Vachanas',
+                    data: { Error: error }
+                }).then(
+
+                    data => { },
+                    error => { }
+                    );
+
+                //this.showAlert(error);
+                this.showAlert("ದಯವಿಟ್ಟು ಕ್ಷಮಿಸಿ, ಅಡಚಣೆಗಾಗಿ ವಿಷಾದಿಸುತ್ತೇವೆ!");
+            }
+        );
+    }
+
+    showAlert(message: string) {
+        let alert = this.alertController.create({
+            //title: 'Error',
+            //subTitle: 'Source: Weather Service',
+            message: message,
+            buttons: [{ text: 'ಧನ್ಯವಾದ' }]
+        });
+        alert.present();
+    }
+}

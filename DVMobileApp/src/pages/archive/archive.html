@@ -1,0 +1,33 @@
+﻿<ion-header>
+    <ion-navbar>
+        <ion-item>
+            <ion-avatar item-start style="float:left">
+                <img src="assets/img/Basavanna.jpg" />
+            </ion-avatar>
+            <h2 text-center class="tab-header"><b>ವಚನ ಕೋಶ</b></h2>
+            <!--<p text-center><b>{{day}}, {{date}}</b></p>-->
+
+        </ion-item>
+    </ion-navbar>
+</ion-header>
+<ion-content no-padding class="card-background-page">
+    <ion-card>
+        <ion-card-header>
+            <ion-item>
+                <ion-label>Date</ion-label>
+                <ion-datetime displayFormat="MMM DD YYYY" min="2017-04-29" [(ngModel)]="VachanaDate" (ngModelChange)="getVachanaForToday(VachanaDate)"></ion-datetime>
+            </ion-item>
+        </ion-card-header>
+        <img src="assets/img/bgArchive.jpg" />
+        <div class="card-contents">
+            <div>{{vachanaOftheDay?.Vachana}}</div>
+            <br />
+            <div class="card-author">{{vachanaOftheDay?.Author}}</div>
+            <hr />
+            <br />
+            <div>{{vachanaOftheDay?.Summary}}</div>
+            <br />
+            <div class="card-contributor">{{vachanaOftheDay?.Contributor}}</div>
+        </div>
+    </ion-card>
+</ion-content>
